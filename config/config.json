@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "frehiwot",
+    "password": "12345678",
+    "database": "wd-todo-dev",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "frehiwot",
+    "password": "12345678",
+    "database": "wd-todo-test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "frehiwot",
+    "password": "12345678",
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
