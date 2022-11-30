@@ -6,7 +6,9 @@
   "scripts": {
     "pretest": "NODE_ENV=test npx sequelize-cli db:drop && NODE_ENV=test npx sequelize-cli db:create",
     "test": "NODE_ENV=test jest --detectOpenHandles",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "start":"nodemon -e js,ejs",
+    "start:prod":"node index.js"
   },
   "lint-staged": {
     "*.js": [
@@ -17,7 +19,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ejs": "^3.1.8",
     "express": "^4.18.1",
+    "nodemon": "^2.0.20",
     "pg": "^8.8.0",
     "sequelize": "^6.23.0"
   },
