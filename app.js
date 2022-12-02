@@ -6,14 +6,14 @@ const path = require('path')
 app.use(bodyParser.json());
 app.set('view engine','ejs')
 app.get('/',async(req,res)=>{
-  const allTodos = await Todo.getTodos()
-  if(req.accepts('html')){
+const {overdueLists,dueTodayLists,dueLaterLists} = await Todo.getAllTodos();
+    if(req.accepts('html')){
     res.render('index',{
-      allTodos
+      overdueLists,dueTodayLists,dueLaterLists
     })
   }else{
     res.json({
-      allTodos
+      overdueLists,dueTodayLists,dueLaterLists
     })
   }
 })
@@ -33,13 +33,21 @@ app.get("/todos", async function (_request, response) {
   console.log("Processing list of all Todos ...");
   // FILL IN YOUR CODE HERE
   try {
-    const todos = await Todo.findAll();
-    return response.json(todos);
+    const {overdueLists,dueTodayLists,dueLaterLists} = await Todo.getAllTodos();
+    return response.json({overdueLists,dueTodayLists,dueLaterLists});
   } catch (error) {
     console.log(error);
     return response.status(422).json(error);
   }
 });
+// app.get("/todos/overDue", async function (request, response) {
+//   try {
+//     const overDuetodos = await Todo.getOverDueTodos()
+//     return response.json(overDuetodos);
+//   } catch (error) {
+//     console.log(error);
+//     return response.status(422).json(error);
+//   }});
 
 app.get("/todos/:id", async function (request, response) {
   try {
@@ -77,11 +85,12 @@ app.delete("/todos/:id", async function (request, response) {
   // FILL IN YOUR CODE HERE
   try {
     const todo = await Todo.findByPk(request.params.id);
-   if(!todo){
+   let delted = await todo.destroy()
+   if(!delted){
     return response.json(false);
 
    }
-   return response.json(true);
+   return response.json(null);
 
   } catch (error) {
     console.log(error);

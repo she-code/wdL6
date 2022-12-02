@@ -1,5 +1,6 @@
 body{
     color:grey;
+    background-color: white;
     font-family: 'Courier New','Courier New', Courier, monospace;
 }
 .header{
@@ -7,4 +8,7 @@ body{
     background-color: green;
     font-weight: bold;
 color: white;
+}
+.todo-item:hover .trash-icon{
+    display: block;
 }

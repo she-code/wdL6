@@ -4,12 +4,34 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My To-d0 Application</title>
+    <title>To-d0 Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="./css/styles.css" ref="stylesheet"/>
+
+
 </head>
 <body>
-<%- include('header.ejs')%>
+    <div class="grid grid-cols-6">
+        <div class="col-start-2 col-span-2">
+            <%- include('header.ejs')%>
+<form>
+    <div class="flex gap-2 py-4" >
+        <div class="flex-auto">
+            <input type="text" placeholder="What's next" required class="border borde-gray-300 text-gray-900 rounded w-full p-2 text-sm" />
+
+        </div>
+        <div class="flex-auto">    <input type="date" class="leading-4 border borde-gray-300 text-gray-900 rounded w-full p-2 text-sm"/>
+
+        </div>
+        <div class="flex-none">    <button type="submit" class="font-medium mr-2 mb-2 bg-green-600 text-white px-5 py-1.5 rounded">Add</button>
+        </div>
+    </div>
+</form>
 <%- include('todos.ejs')%>
+
+</div>
+
+    </div>
 <%- include('footer.ejs')%>
 
 </body>
