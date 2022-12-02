@@ -1,8 +1,11 @@
 
 <div>
-    <h5>Overdue 
+    <div class="flex">
+        <h5 class="mr-2">Overdue
+        </h5>
         <span><%=overdueLists.length%></span>
-    </h5>
+
+    </div>
     
     <ul class="list-none">
         <% for(var i=0;i<overdueLists.length; i++){%>
@@ -23,10 +26,13 @@
     </ul>
 </div>
 <div>
-    <h5>Due Today 
+
+    <div class="flex">
+        <h5 class="mr-2">Due Today 
+        </h5>
         <span><%=dueTodayLists.length%></span>
-    </h5>
-    
+
+    </div>
     <ul class="list-none">
         <% for(var i=0;i<dueTodayLists.length; i++){%>
             
@@ -46,9 +52,13 @@
     </ul>
 </div>
 <div>
-    <h5>Due Later 
+    <div class="flex">
+        <h5 class="mr-2">Due Later 
+        </h5>
         <span><%=dueLaterLists.length%></span>
-    </h5>
+
+    </div>
+  
     
     <ul class="list-none">
         <% for(var i=0;i<dueLaterLists.length; i++){%>
