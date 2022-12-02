@@ -2,3 +2,9 @@ body{
     color:grey;
     font-family: 'Courier New','Courier New', Courier, monospace;
 }
+.header{
+    text-align: center;
+    background-color: green;
+    font-weight: bold;
+color: white;
+}

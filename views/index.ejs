@@ -9,14 +9,9 @@
 </head>
 <body>
 <%- include('header.ejs')%>
-<table>
-    <% for(var i=0;i<allTodos.length; i++){%>
-        <tr>
-            <td>
-                <%= allTodos[i].title %>
-            </td>
-        </tr>
-    <%}%>
-</table>
+<%- include('todos.ejs')%>
+<%- include('footer.ejs')%>
+
 </body>
+
 </html>
