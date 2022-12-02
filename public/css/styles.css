@@ -9,6 +9,12 @@ body{
     font-weight: bold;
 color: white;
 }
+.hide{
+    display: none;
+}
 .todo-item:hover .trash-icon{
     display: block;
+}
+.trash-icon{
+    color: grey;
 }
