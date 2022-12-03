@@ -32,6 +32,13 @@ module.exports = (sequelize, DataTypes) => {
         }
       })
     }
+    static async remove(id){
+      return this.destroy({
+        where:{
+          id
+        }
+      })
+    }
     static async getAllTodos() {
 
       const overdueLists = await Todo.overdue();
