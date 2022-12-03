@@ -1,5 +1,5 @@
 "use strict";
-const { Model ,Op} = require("sequelize");
+const { Model, Op } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
     /**
@@ -18,36 +18,42 @@ module.exports = (sequelize, DataTypes) => {
     markAsCompleted() {
       return this.update({ completed: true });
     }
-    static getTodos(){
-      return this.findAll()
+    static getTodos() {
+      return this.findAll();
     }
-    static getOverDueTodos(){
-      var today = new Date()
-      console.log(today)
+    static getOverDueTodos() {
+      var today = new Date();
+      console.log(today);
       return this.findAll({
-        where:{
-          dueDate:{
-            [Op.lt]:today
-          }
-        }
-      })
+        where: {
+          dueDate: {
+            [Op.lt]: today,
+          },
+        },
+      });
     }
-    static async remove(id){
+    setCompletionStatus(completed) {
+     
+      return this.update({
+        completed: completed,
+      });
+    }
+    static async remove(id) {
       return this.destroy({
-        where:{
-          id
-        }
-      })
+        where: {
+          id,
+        },
+      });
     }
     static async getAllTodos() {
-
       const overdueLists = await Todo.overdue();
-  
+
       const dueTodayLists = await Todo.dueToday();
-     
+
       const dueLaterLists = await Todo.dueLater();
-     
-      return {overdueLists,dueTodayLists,dueLaterLists}
+     const completedItems= await Todo.getCompletedItems()
+
+      return { overdueLists, dueTodayLists, dueLaterLists,completedItems };
     }
 
     static async overdue() {
@@ -57,6 +63,7 @@ module.exports = (sequelize, DataTypes) => {
           dueDate: {
             [Op.lt]: new Date(),
           },
+          completed:false
         },
       });
     }
@@ -67,7 +74,8 @@ module.exports = (sequelize, DataTypes) => {
         where: {
           dueDate: {
             [Op.eq]: new Date(),
-          },
+          },          completed:false
+
         },
         order: [["id", "ASC"]],
       });
@@ -79,8 +87,18 @@ module.exports = (sequelize, DataTypes) => {
         where: {
           dueDate: {
             [Op.gt]: new Date(),
-          },
+          },          completed:false
+
         },
+        order: [["id", "ASC"]],
+      });
+    }
+    static async getCompletedItems() {
+      // FILL IN HERE TO RETURN ITEMS DUE LATER
+      return Todo.findAll({
+        where: {
+          completed: true}
+        ,
         order: [["id", "ASC"]],
       });
     }

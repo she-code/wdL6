@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<%= csrfToken %>" />
     <title>To-d0 Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="./css/styles.css" ref="stylesheet"/>
@@ -17,10 +18,15 @@
     }
     </style>
     <script>
+        var token = document.querySelector('meta[name="csrf-token"]').getAttribute("content")
         function updateTodo(id){
-            fetch(`/todos/${id}/markAsCompleted`,{
+            fetch(`/todos/${id}`,{
                 method:'put',
-                headers:{"Content-Type":"application/json"}
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({
+                    completed:true,
+                    _csrf:token
+                })
             }).then((res)=>{
                 if(res.ok){
                     window.location.reload();
@@ -30,7 +36,10 @@
         function deleteTodo(id){
             fetch(`/todos/${id}`,{
                 method:'delete',
-                headers:{"Content-Type":"application/json"}
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({
+                    _csrf:token
+                })
             }).then((res)=>{
                 if(res.ok){
                     window.location.reload();
@@ -44,12 +53,13 @@
         <div class="col-start-2 col-span-2">
             <%- include('header.ejs')%>
 <form action="/todos" method="post">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
     <div class="flex gap-2 py-4" >
         <div class="flex-auto">
             <input type="text" name="title"placeholder="What's next" required class="border borde-gray-300 text-gray-900 rounded w-full p-2 text-sm" />
 
         </div>
-        <div class="flex-auto">    <input type="date" name="dueDate"class="leading-4 border borde-gray-300 text-gray-900 rounded w-full p-2 text-sm"/>
+        <div class="flex-auto">    <input type="date" required name="dueDate"class="leading-4 border borde-gray-300 text-gray-900 rounded w-full p-2 text-sm"/>
 
         </div>
         <div class="flex-none">    <button type="submit" class="font-medium mr-2 mb-2 bg-green-600 text-white px-5 py-1.5 rounded">Add</button>
