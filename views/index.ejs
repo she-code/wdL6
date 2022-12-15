@@ -8,7 +8,6 @@
     <title>To-d0 Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="./css/styles.css" ref="stylesheet"/>
-
     <style>
         .todo-item:hover .trash-icon{
         display: block;
@@ -20,11 +19,12 @@
     <script>
         var token = document.querySelector('meta[name="csrf-token"]').getAttribute("content")
         function updateTodo(id){
+            let compelete = false
             fetch(`/todos/${id}`,{
                 method:'put',
                 headers:{"Content-Type":"application/json"},
                 body:JSON.stringify({
-                    completed:true,
+                    completed:!compelete,
                     _csrf:token
                 })
             }).then((res)=>{
@@ -66,7 +66,7 @@
         </div>
     </div>
 </form>
-<%- include('todos.ejs')%>
+<%- include('todos.ejs')%> 
 
 </div>
 
