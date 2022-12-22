@@ -95,7 +95,7 @@ app.delete("/todos/:id", async function (request, response) {
   // FILL IN YOUR CODE HERE
   try {
     await Todo.remove(request.params.id);
-    return response.json(false);
+    return response.json(true);
   } catch (error) {
     console.log(error);
     return response.status(422).json(error);

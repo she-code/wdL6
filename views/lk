@@ -77,3 +77,4 @@
     
   
 </div>
+<%= completedItems[i].completed ? "checked" : ""%>

@@ -18,8 +18,8 @@
     </style>
     <script>
         var token = document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-        function updateTodo(id){
-            let compelete = false
+        function updateTodo(id,compelete){
+           // let compelete = false
             fetch(`/todos/${id}`,{
                 method:'put',
                 headers:{"Content-Type":"application/json"},
