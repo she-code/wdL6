@@ -11,7 +11,7 @@
                     <div class="flex w-fit my-2 px-2 py-1 items-center rounded hover:bg-purple-50" >
                        
                           <input type="hidden" value=""/>
-                        <input type="checkbox" id=`todo-checkbox-<%=overdueLists[i].id%>` class="w-4 h-4 text-blue-100 rounded border bg-gray" checked=<%=overdueLists[i].completed?true:false%> onclick="{updateTodo(<%=overdueLists[i].id%>,<%=overdueLists[i].completed%>)}"/>
+                        <input type="checkbox" id=`todo-checkbox-<%=overdueLists[i].id%>` class="w-4 h-4 text-blue-100 rounded border bg-gray" <%= overdueLists[i].completed ? "checked" : ""%> onclick="{updateTodo(<%=overdueLists[i].id%>,<%=overdueLists[i].completed%>)}"/>
                         <label for=`todo-checkbox-<%=overdueLists[i].id%>` class="ml-2 text-sm text-gray-600 cursor-pointer">  <%= overdueLists[i].title %></label>
                         <a href="" class="hidden ml-2 trash-icon" onclick="deleteTodo('<%= overdueLists[i].id %>')"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
 
