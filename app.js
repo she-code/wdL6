@@ -157,22 +157,38 @@ app.post("/users", async (request, response) => {
     });
     request.logIn(user, (err) => {
       if (err) {
-        console.log(err);
+        console.log('from',err);
       }
       response.redirect("/todos");
     });
   } catch (error) {
-    // if (error.name === "SequelizeValidationError") {
-    //   for (var key in error.errors) {
-    //     request.flash("error", "Title must have minimum of 5 characters");
-    //   }
+    if (error.name === "SequelizeValidationError") {
+      for (var key in error.errors) {
+        request.flash("error", "Title must have minimum of 5 characters");
+      }
     //   response.redirect("/todos");
-     
+    }
     // }
-  
-    if(error.name === 'SequelizeUniqueConstraintError'){
+  // if (error.name === "SequelizeValidationError") {
+    //   request.flash("error", "First name must have minimum of 2 characters");
+    //   response.redirect("/signup");
+    // }
+    console.log(error.message);
+    // if (
+    //   error.message == "Validation error: Validation len on firstName failed"
+    // ) {
+    //   request.flash("error", "First name must have minimum of 2 characters");
+    //   response.redirect("/signup");
+    // }
+    // if (
+    //   error.message == "Validation error: Validation isEmail on email failed"
+    // ) {
+    //   request.flash("error", "Invalid email");
+    //   response.redirect("/signup");
+    // }
+    if (error.name === "SequelizeUniqueConstraintError") {
       request.flash("error", "Email already exists");
-      response.redirect("/todos");
+      response.redirect("/signup");
     }
     console.log(error);
   }
