@@ -19,6 +19,7 @@ const app = express();
 
 const saltRounds = 10;
 
+//parse json
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser("secret string"));
@@ -157,40 +158,35 @@ app.post("/users", async (request, response) => {
     });
     request.logIn(user, (err) => {
       if (err) {
-        console.log('from',err);
+        console.log("from", err);
       }
       response.redirect("/todos");
     });
   } catch (error) {
-    if (error.name === "SequelizeValidationError") {
-      for (var key in error.errors) {
-        request.flash("error", "Title must have minimum of 5 characters");
-      }
-    //   response.redirect("/todos");
-    }
-    // }
-  // if (error.name === "SequelizeValidationError") {
-    //   request.flash("error", "First name must have minimum of 2 characters");
-    //   response.redirect("/signup");
-    // }
-    console.log(error.message);
-    // if (
-    //   error.message == "Validation error: Validation len on firstName failed"
-    // ) {
-    //   request.flash("error", "First name must have minimum of 2 characters");
-    //   response.redirect("/signup");
-    // }
-    // if (
-    //   error.message == "Validation error: Validation isEmail on email failed"
-    // ) {
-    //   request.flash("error", "Invalid email");
-    //   response.redirect("/signup");
-    // }
     if (error.name === "SequelizeUniqueConstraintError") {
       request.flash("error", "Email already exists");
       response.redirect("/signup");
     }
-    console.log(error);
+    if (error.name === "SequelizeValidationError") {
+      for (var key in error.errors) {
+        console.log(error.errors[key].message);
+        if (
+          error.errors[key].message === "Validation len on firstName failed"
+        ) {
+          request.flash(
+            "error",
+            "First name must have minimum of 2 characters"
+          );
+        }
+        if (
+          error.errors[key].message === "Validation isEmail on email failed"
+        ) {
+          request.flash("error", "Invalid Email");
+        }
+      }
+      //   response.redirect("/todos");
+      response.redirect("/signup");
+    }
   }
 });
 
@@ -211,8 +207,10 @@ app.post(
 //get todo by id
 app.get("/todos/:id", async function (request, response) {
   try {
-    const userId = request.user.id
-    const todo = await Todo.findOne({where:{id:request.params.id,userId}});
+    const userId = request.user.id;
+    const todo = await Todo.findOne({
+      where: { id: request.params.id, userId },
+    });
     return response.json(todo);
   } catch (error) {
     console.log(error);
@@ -242,15 +240,12 @@ app.post(
           request.flash("error", "Title must have minimum of 5 characters");
         }
         response.redirect("/todos");
-       
       }
       //invalid date
-    if(error.name =="SequelizeDatabaseError"){
+      if (error.name == "SequelizeDatabaseError") {
         request.flash("error", "Invalid date");
         response.redirect("/todos");
-       
       }
-    
     }
   }
 );
