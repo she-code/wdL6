@@ -1,28 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<%= csrfToken %>" />
+    <title>To-d0 Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="./css/styles.css" ref="stylesheet"/>
+    <style>
+        .todo-item:hover .trash-icon{
+        display: block;
+    }
+    .trash-icon{
+        color: grey;
+    }
+    </style>
+    <script>
+        var token = document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+        function updateTodo(id,compelete){
+           // let compelete = false
+            fetch(`/todos/${id}`,{
+                method:'put',
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({
+                    completed:!compelete,
+                    _csrf:token
+                })
+            }).then((res)=>{
+                if(res.ok){
+                    window.location.reload();
+                }
+            }).catch((err)=>console.log(err))
+        }
+        function deleteTodo(id){
+            fetch(`/todos/${id}`,{
+                method:'delete',
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({
+                    _csrf:token
+                })
+            }).then((res)=>{
+                if(res.ok){
+                    window.location.reload();
+                }
+            }).catch((err)=>console.log(err))
+        }
+    </script>
+</head>
+<body>
+    <div class="grid grid-cols-6">
+        <div class="col-start-2 col-span-2">
+            <%- include('header.ejs')%>
+           <a href="/signout" class="text-green-600">Sign Out</a>
+<form action="/todos" method="post">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+    <div class="flex gap-2 py-4" >
+        <div class="flex-auto">
+            <input type="text" name="title"placeholder="What's next"  class="border borde-gray-300 text-gray-900 rounded w-full p-2 text-sm" />
 
-<div>
-    <div class="flex">
-        <h5 class="mr-2"><%=title%>
-        </h5>
-        <span id=`count-<%=title%>`><%=data.length%></span>
-        <ul class="list-none">
-            <% for(var i=0;i<data.length; i++){%>
-                
-                <li class="todo-item">
-                    <div class="flex w-fit my-2 px-2 py-1 items-center rounded hover:bg-purple-50" >
-                       
-                          <input type="hidden" value=""/>
-                        <input type="checkbox" id=`todo-checkbox-<%=data[i].id%>` class="w-4 h-4 text-blue-100 rounded border bg-gray" <%= data[i].completed ? "checked" : ""%> onclick="{updateTodo(<%=data[i].id%>,<%=data[i].completed%>)}"/>
-                        <label for=`todo-checkbox-<%=data[i].id%>` class="ml-2 text-sm text-gray-600 cursor-pointer">  <%= data[i].title %></label>
-                        <a href="" class="hidden ml-2 trash-icon" onclick="deleteTodo('<%= data[i].id %>')"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+        </div>
+        <div class="flex-auto">    <input type="date"  name="dueDate"class="leading-4 border borde-gray-300 text-gray-900 rounded w-full p-2 text-sm"/>
 
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                  </svg></a>
-                    </div>
-                </li>
-            <%}%>
-           
-        </ul>
+        </div>
+        <div class="flex-none">    <button type="submit" class="font-medium mr-2 mb-2 bg-green-600 text-white px-5 py-1.5 rounded">Add</button>
+        </div>
     </div>
-  
+</form>
+<%- include('todo.ejs')%> 
+
 </div>
-<div>
+<% if(messages && messages.error && messages.error.length > 0)  { %>
+    <% for(var i=0; i<messages.error.length; i++) { %>
+        
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert" id="alert">
+            <strong class="font-bold"><%= messages.error[i] %></strong>
+            <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+              <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+            </span>
+          </div>
+          <script> var alert = document.getElementById('alert'); 
+           setTimeout(() => {
+          
+            alert.style.visibility = 'hidden';
+          }, 3000);
+        </script>
+
+         
+          
+    <% } %>
+  <% } %>
+    </div>
+<%- include('footer.ejs')%>
+
+</body>
+
+</html>

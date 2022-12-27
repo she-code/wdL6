@@ -1,100 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<%= csrfToken %>" />
     <title>To-d0 Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="./css/styles.css" ref="stylesheet" />
+    <link href="./css/styles.css" ref="stylesheet"/>
     <style>
-      .todo-item:hover .trash-icon {
+        .todo-item:hover .trash-icon{
         display: block;
-      }
-      .trash-icon {
+    }
+    .trash-icon{
         color: grey;
-      }
+    }
     </style>
-    <script>
-      var token = document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content");
-      function updateTodo(id, compelete) {
-        // let compelete = false
-        fetch(`/todos/${id}`, {
-          method: "put",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            completed: !compelete,
-            _csrf: token,
-          }),
-        })
-          .then((res) => {
-            if (res.ok) {
-              window.location.reload();
-            }
-          })
-          .catch((err) => console.log(err));
-      }
-      function deleteTodo(id) {
-        fetch(`/todos/${id}`, {
-          method: "delete",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            _csrf: token,
-          }),
-        })
-          .then((res) => {
-            if (res.ok) {
-              window.location.reload();
-            }
-          })
-          .catch((err) => console.log(err));
-      }
-    </script>
-  </head>
-  <body>
-    <div class="grid grid-cols-6">
-      <div class="col-start-2 col-span-2">
-        <%- include('header.ejs')%>
-        <form action="/todos" method="post">
-          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-          <div class="flex gap-2 py-4">
-            <div class="flex-auto">
-              <input
-                type="text"
-                name="title"
-                placeholder="What's next"
-                required
-                class="border borde-gray-300 text-gray-900 rounded w-full p-2 text-sm"
-              />
-            </div>
-            <div class="flex-auto">
-              <input
-                type="date"
-                required
-                name="dueDate"
-                class="leading-4 border borde-gray-300 text-gray-900 rounded w-full p-2 text-sm"
-              />
-            </div>
-            <div class="flex-none">
-              <button
-                type="submit"
-                class="font-medium mr-2 mb-2 bg-green-600 text-white px-5 py-1.5 rounded"
-              >
-                Add
-              </button>
-            </div>
-          </div>
-        </form>
-        <%- include('todos.ejs' ,{title:"Overdue",data:overdueLists})%>
-        <%- include('todos.ejs' ,{title:"Due Today",data:dueTodayLists})%>
-        <%- include('todos.ejs' ,{title:"Due Later",data:dueLaterLists})%>
-        <%- include('todos.ejs' ,{title:"Completed Items",data:completedItems})%>
 
-      </div>
+</head>
+<body>
+    <div class="grid grid-cols-6 pt-5">
+        <div class="col-start-2 col-span-2">
+            <%- include('header.ejs')%>
+            <p class="py-2">Welcome to the To-Do manager</p>
+            <p class="py-2">New here? <a href="/signup" class="text-green-600">Sign-up now</a></p>
+            <p class="py-2">Already have an account? <a href="/login" class="text-green-600">Sign-In</a></p>
+
+</div>
+
     </div>
-    <%- include('footer.ejs')%>
-  </body>
+<%- include('footer.ejs')%>
+
+</body>
+
 </html>

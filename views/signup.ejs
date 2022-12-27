@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<%= csrfToken %>" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="./css/styles.css" ref="stylesheet"/>
+    <title><%= title %> </title>
+<body>
+    <div class="grid grid-cols-6">
+        <div class="col-start-2 col-span-2">
+            <%- include('header.ejs')%>
+            <h6 class="py-6">Sign-up as a new user</h6>
+            <form action="/users" method="post">
+                <input type="hidden" name="_csrf" value="<%=csrfToken%>"/>
+                <div class="py-3">
+                    <label for="firstName">First Name</label>
+                    <input type="text" name="firstName" class="border border-gray-300 text-gray-900 rounded p-2 w-full"/>
+                </div>
+                <div class="py-3">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" name="lastName" class="border border-gray-300 text-gray-900 rounded p-2 w-full"/>
+                </div>
+               <div class="py-3">
+                <label for="email">Email</label>
+                <input type="email" name="email" class="border border-gray-300 text-gray-900 rounded p-2 w-full"/>
+               </div>
+               <div class="py-3"> 
+                <label for="password">Password</label>
+                <input type="password" name="password" class="border border-gray-300 text-gray-900 rounded p-2 w-full"/>
+               </div>
+               <div class="py-3"> 
+                <button type="submit" class="text-white bg-green-600 hover:bg-green-800 font-medium rounded px-5 py-2">Sign up</button>
+               </div>
+                
+            </form>
+            <% if(messages && messages.error && messages.error.length > 0)  { %>
+                <% for(var i=0; i<messages.error.length; i++) { %>
+                    
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert" id="alert">
+                        <strong class="font-bold"><%= messages.error[i] %></strong>
+                        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                          <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+                        </span>
+                      </div>
+                      <script> var alert = document.getElementById('alert'); 
+                       setTimeout(() => {
+                      
+                        alert.style.visibility = 'hidden';
+                      }, 3000);
+                    </script>
+            
+                     
+                      
+                <% } %>
+              <% } %>
+        </div>
+    </div>
+</body>
+</html>

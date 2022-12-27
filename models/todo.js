@@ -9,10 +9,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Todo.belongsTo(models.User, {
+        foreignKey: "userId",
+      });
     }
 
-    static addTodo({ title, dueDate }) {
-      return this.create({ title: title, dueDate: dueDate, completed: false });
+    static addTodo({ title, dueDate, userId }) {
+      return this.create({
+        title: title,
+        dueDate: dueDate,
+        completed: false,
+        userId,
+      });
     }
 
     markAsCompleted() {
@@ -37,65 +45,70 @@ module.exports = (sequelize, DataTypes) => {
         completed: completed,
       });
     }
-    static async remove(id) {
+    static async remove(id, userId) {
       return this.destroy({
         where: {
           id,
+          userId,
         },
       });
     }
-    static async getAllTodos() {
-      const overdueLists = await Todo.overdue();
+    static async getAllTodos(userId) {
+      const overdueLists = await Todo.overdue(userId);
 
-      const dueTodayLists = await Todo.dueToday();
+      const dueTodayLists = await Todo.dueToday(userId);
 
-      const dueLaterLists = await Todo.dueLater();
-      const completedItems = await Todo.getCompletedItems();
+      const dueLaterLists = await Todo.dueLater(userId);
+      const completedItems = await Todo.getCompletedItems(userId);
 
       return { overdueLists, dueTodayLists, dueLaterLists, completedItems };
     }
 
-    static async overdue() {
+    static async overdue(userId) {
       // FILL IN HERE TO RETURN OVERDUE ITEMS
       return Todo.findAll({
         where: {
           dueDate: {
             [Op.lt]: new Date(),
           },
+          userId,
           completed: false,
         },
       });
     }
 
-    static async dueToday() {
+    static async dueToday(userId) {
       // FILL IN HERE TO RETURN ITEMS DUE tODAY
       return Todo.findAll({
         where: {
           dueDate: {
             [Op.eq]: new Date(),
           },
+          userId,
           completed: false,
         },
         order: [["id", "ASC"]],
       });
     }
 
-    static async dueLater() {
+    static async dueLater(userId) {
       // FILL IN HERE TO RETURN ITEMS DUE LATER
       return Todo.findAll({
         where: {
           dueDate: {
             [Op.gt]: new Date(),
           },
+          userId,
           completed: false,
         },
         order: [["id", "ASC"]],
       });
     }
-    static async getCompletedItems() {
+    static async getCompletedItems(userId) {
       // FILL IN HERE TO RETURN ITEMS DUE LATER
       return Todo.findAll({
         where: {
+          userId,
           completed: true,
         },
         order: [["id", "ASC"]],
@@ -104,8 +117,21 @@ module.exports = (sequelize, DataTypes) => {
   }
   Todo.init(
     {
-      title: DataTypes.STRING,
-      dueDate: DataTypes.DATEONLY,
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: true,
+          len: 5,
+        },
+      },
+      dueDate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+        validate: {
+          notNull: true,
+        },
+      },
       completed: DataTypes.BOOLEAN,
     },
     {
