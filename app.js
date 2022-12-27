@@ -273,17 +273,17 @@ app.delete(
   }
 );
 //get all users
-app.get('/users/all',async(req,res)=>{
-  const users = await User.findAll();
-  res.status(200).json({
-    users
-  })
-})
-//delete user by id
-app.post('/users/id',async(req,res)=>{
-const {id} = req.body
-  const user = await User.findOne({where:{id}})
-  await user.destroy()
-  res.send(true)
-})
+// app.get('/users/all',async(req,res)=>{
+//   const users = await User.findAll();
+//   res.status(200).json({
+//     users
+//   })
+// })
+// //delete user by id
+// app.post('/users/id',async(req,res)=>{
+// const {id} = req.body
+//   const user = await User.findOne({where:{id}})
+//   await user.destroy()
+//   res.send(true)
+// })
 module.exports = app;
